@@ -9,8 +9,11 @@ public class ClientThread implements Runnable{
     private String nomeServer = "localhost" ;
     private int porta = 6789 ;
     private Socket client = null;
+    private BufferedReader tastiera = new BufferedReader(new InputStreamReader(System.in));
     private BufferedReader inDaSThread;
     private DataOutputStream outVersoSThread;
+    private String[] numeriComprati;
+    private String[] numeriVincenti = new String[5];
     Thread processo;
 
     public ClientThread(){
@@ -29,8 +32,27 @@ public class ClientThread implements Runnable{
     @Override
     public void run() {
         try {
-            outVersoSThread.writeBytes(" OKKK " + "\n");
-        } catch (IOException e) {
+
+            System.out.println("Quante carte vuoi comprare?");
+            String n = tastiera.readLine();
+            numeriComprati = new String[Integer.parseInt(n)];
+            outVersoSThread.writeBytes(n + "\n");
+            System.out.println("Ricevo le carte...");
+
+            for (int z = 0; z<numeriComprati.length; z++){
+                numeriComprati[z] = inDaSThread.readLine();
+
+            }
+
+
+
+
+            for (int i = 0; i < numeriVincenti.length; i++){
+                numeriVincenti[i] = inDaSThread.readLine();
+            }
+        }
+
+        catch (Exception e) {
             e.printStackTrace();
         }
     }

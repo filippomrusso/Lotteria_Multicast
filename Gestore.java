@@ -1,11 +1,14 @@
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Random;
 
 public class Gestore implements Runnable{
 
-    int numeroConnessioni;  //numero di client possibili
+    private Random gen;
+    private int[] numeriVincenti = new int[5];
+    int numeroConnessioni;                       //numero di client possibili
     ServerThread[] arrayProcessiDedicatiClient; //Array
-    ServerSocket socketServer;  //Socket server
+    ServerSocket socketServer;                  //Socket server
     boolean loop = true;
     Thread processo;
 
@@ -33,13 +36,30 @@ public class Gestore implements Runnable{
                 }
             }
             catch(Exception e){}
+
+            try {
+                processo.sleep(60000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            Gestore g = new Gestore(4);
+            g.numeriVincenti();
         }
 
     }
 
-    public void comunicaNumeri(){
-        for (int i = 0; i < arrayProcessiDedicatiClient.length; i++) {
-            arrayProcessiDedicatiClient[i].inviaNumeriAlClient();
+    public void numeriVincenti(){
+        int temp;
+        for(int i = 0; i < numeriVincenti.length; i++){
+            // da migliorare
+           temp = gen.nextInt(90);
+           numeriVincenti[i] = temp;
         }
     }
+
+    public int[] getNumeriVincenti() {
+        return numeriVincenti;
+    }
+
 }
