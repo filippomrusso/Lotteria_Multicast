@@ -12,8 +12,9 @@ public class ClientThread implements Runnable{
     private BufferedReader tastiera = new BufferedReader(new InputStreamReader(System.in));
     private BufferedReader inDaSThread;
     private DataOutputStream outVersoSThread;
-    private String[] numeriComprati;
+    private int[] numeriComprati;
     private String[] numeriVincenti = new String[5];
+    private  int cash = 0;
     Thread processo;
 
     public ClientThread(){
@@ -34,22 +35,49 @@ public class ClientThread implements Runnable{
         try {
 
             System.out.println("Quante carte vuoi comprare?");
-            String n = tastiera.readLine();
-            numeriComprati = new String[Integer.parseInt(n)];
+            int n = tastiera.read();
+            numeriComprati = new int[n];
             outVersoSThread.writeBytes(n + "\n");
             System.out.println("Ricevo le carte...");
 
+\
+
             for (int z = 0; z<numeriComprati.length; z++){
-                numeriComprati[z] = inDaSThread.readLine();
+                numeriComprati[z] = inDaSThread.read();
 
             }
 
+            for ( int p = 0; p < numeriComprati.length; p++ ){
+                System.out.println(" Numero acquistato n" + p + " = " + numeriComprati[p]);
+            }
 
+            System.out.println("Estrazione in corso ...");
 
 
             for (int i = 0; i < numeriVincenti.length; i++){
                 numeriVincenti[i] = inDaSThread.readLine();
             }
+
+            for (int m = 0 ; m < numeriVincenti.length; m++){
+                for (int j = 0; j < numeriComprati.length; j++) {
+
+                    if ( numeriVincenti[m] == String.valueOf(numeriComprati[j])){
+                        System.out.println("Il numero " + numeriVincenti + " ha vinto !");
+                        cash = cash + 10000;
+                    }
+
+                    else{
+                        System.out.println("Il numero acquistato " + numeriComprati[j] + " non ha vinto");
+                    }
+                }
+            }
+
+            System.out.println("Hai vinto " + cash + " euro cash");
+
+
+            outVersoSThread.close();
+            inDaSThread.close();
+            client.close();
         }
 
         catch (Exception e) {
@@ -58,7 +86,8 @@ public class ClientThread implements Runnable{
     }
 
     public static void main(String[] args) {
-        ClientThread client = new ClientThread();
-        client.run();
+        ClientThread c = new ClientThread();
+        Thread client = new Thread(c);
+        client.start();
     }
 }

@@ -8,8 +8,8 @@ public class ServerThread implements Runnable{
 
     Gestore handler;
     Thread processo;
-    private Random gen;
-    private Socket client;
+    private Random gen = new Random();
+    private Socket client = null;
     private BufferedReader inDaClient;
     private DataOutputStream outVersoClient;
     private int[] numeriComprati;
@@ -33,6 +33,8 @@ public class ServerThread implements Runnable{
 
     @Override
     public void run() {
+
+        for(;;){
         try {
             numeriVincentiDaInviare = handler.getNumeriVincenti();
             System.out.println("Aspetto di ricevere n carte da client");
@@ -40,15 +42,26 @@ public class ServerThread implements Runnable{
             int nReale = Integer.parseInt(n);
             System.out.println("Genero carte...");
 
-            for ( int z = 0; z < nReale; z++ ){
+            for (int z = 0; z < nReale; z++) {
                 numeriComprati[z] = gen.nextInt(90);
-                outVersoClient.writeBytes(String.valueOf(numeriComprati[z] + "\n"));
+                System.out.println(numeriComprati[z]);
+                outVersoClient.writeInt((numeriComprati[z]));
             }
 
-            for (int i = 0; i < numeriVincentiDaInviare.length; i++ ){
+            for (int i = 0; i < numeriVincentiDaInviare.length; i++) {
                 outVersoClient.writeBytes(String.valueOf(numeriVincentiDaInviare[i] + "\n"));
             }
+
+            inDaClient.close();
+            outVersoClient.close();
+            client.close();
+
         }
         catch(Exception e){}
+        }
+
+
+
     }
+
 }
