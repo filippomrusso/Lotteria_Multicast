@@ -28,9 +28,9 @@ public class Gestore implements Runnable{
         }
         catch (Exception e){loop=false;}
 
-        if(loop){
+        while(loop){
             try {
-                for (int i = 0; i < arrayProcessiDedicatiClient.length; i++) {
+                for (int i = 0; i <= numeroConnessioni; i++) {
                     Socket t = null;
                     t = socketServer.accept();
                     arrayProcessiDedicatiClient[i] = new ServerThread(t,this);
@@ -38,11 +38,13 @@ public class Gestore implements Runnable{
                     processiServer[i].start();
                 }
             }
-            catch(Exception e){}
+            catch(Exception e){
+                loop = false;
+            }
 
 
-            Gestore g = new Gestore(4);
-            g.numeriVincenti();
+            //Gestore g = new Gestore(4);
+            //g.numeriVincenti();
 
 
         }
@@ -62,6 +64,7 @@ public class Gestore implements Runnable{
     public static void main(String[] args) {
         Gestore g = new Gestore(4);
         Thread handler = new Thread(g);
+        g.numeriVincenti();
         handler.start();
     }
 

@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.Random;
@@ -17,7 +18,7 @@ public class ServerThread implements Runnable{
 
     public ServerThread(Socket client, Gestore handler)
      {
-         this.handler = new Gestore(5);
+         this.handler = new Gestore(4);
          this.client = client;
          try{
              inDaClient = new BufferedReader(new InputStreamReader(client.getInputStream()));
@@ -34,34 +35,59 @@ public class ServerThread implements Runnable{
     @Override
     public void run() {
 
-        for(;;){
+
         try {
             numeriVincentiDaInviare = handler.getNumeriVincenti();
             System.out.println("Aspetto di ricevere n carte da client");
-            String n = inDaClient.readLine();
-            int nReale = Integer.parseInt(n);
+            int n = inDaClient.read();
             System.out.println("Genero carte...");
+            generoCarteComprate(n);
 
-            for (int z = 0; z < nReale; z++) {
-                numeriComprati[z] = gen.nextInt(90);
-                System.out.println(numeriComprati[z]);
-                outVersoClient.writeInt((numeriComprati[z]));
+            boolean check1 = false;
+            for (int z = 0; z <= n; z++) {
+                outVersoClient.writeInt(numeriComprati[z]);
             }
+
+
 
             for (int i = 0; i < numeriVincentiDaInviare.length; i++) {
-                outVersoClient.writeBytes(String.valueOf(numeriVincentiDaInviare[i] + "\n"));
+                outVersoClient.writeInt((numeriVincentiDaInviare[i]));
             }
 
+
+            client.close();
             inDaClient.close();
             outVersoClient.close();
-            client.close();
 
         }
-        catch(Exception e){}
+        catch(Exception e){
+            try {
+                client.close();
+                inDaClient.close();
+                outVersoClient.close();
+            }
+            catch (IOException x){
+
+            }
         }
 
 
+
+        }
+
+        public void generoCarteComprate(int nCarteComprate){
+        numeriComprati = new int[nCarteComprate];
+            for(int i = 0; i <= nCarteComprate; i++){
+                numeriComprati[i] = gen.nextInt(90);
+        }
 
     }
 
 }
+
+
+
+
+
+
+

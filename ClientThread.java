@@ -37,15 +37,15 @@ public class ClientThread implements Runnable{
             System.out.println("Quante carte vuoi comprare?");
             int n = tastiera.read();
             numeriComprati = new int[n];
-            outVersoSThread.writeBytes(n + "\n");
+            outVersoSThread.writeInt(n);
             System.out.println("Ricevo le carte...");
 
-\
-
-            for (int z = 0; z<numeriComprati.length; z++){
+            for (int z = 0; z < numeriComprati.length; z++){
                 numeriComprati[z] = inDaSThread.read();
-
             }
+
+
+            System.out.println("Carte ricevute!");
 
             for ( int p = 0; p < numeriComprati.length; p++ ){
                 System.out.println(" Numero acquistato n" + p + " = " + numeriComprati[p]);
