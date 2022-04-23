@@ -12,7 +12,7 @@ public class ClientThread implements Runnable{
     private BufferedReader tastiera = new BufferedReader(new InputStreamReader(System.in));
     private BufferedReader inDaSThread;
     private DataOutputStream outVersoSThread;
-    private int[] numeriComprati;
+    private String[] numeriComprati;
     private String[] numeriVincenti = new String[5];
     private  int cash = 0;
     Thread processo;
@@ -35,13 +35,13 @@ public class ClientThread implements Runnable{
         try {
 
             System.out.println("Quante carte vuoi comprare?");
-            int n = tastiera.read();
-            numeriComprati = new int[n];
-            outVersoSThread.writeInt(n);
+            String n = tastiera.readLine();
+            numeriComprati = new String[Integer.parseInt(n)];
+            outVersoSThread.writeBytes(n+"\n");
             System.out.println("Ricevo le carte...");
 
             for (int z = 0; z < numeriComprati.length; z++){
-                numeriComprati[z] = inDaSThread.read();
+                numeriComprati[z] = inDaSThread.readLine();
             }
 
 
@@ -61,7 +61,7 @@ public class ClientThread implements Runnable{
             for (int m = 0 ; m < numeriVincenti.length; m++){
                 for (int j = 0; j < numeriComprati.length; j++) {
 
-                    if ( numeriVincenti[m] == String.valueOf(numeriComprati[j])){
+                    if ( numeriVincenti[m] == numeriComprati[j]){
                         System.out.println("Il numero " + numeriVincenti + " ha vinto !");
                         cash = cash + 10000;
                     }

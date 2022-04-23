@@ -39,25 +39,31 @@ public class ServerThread implements Runnable{
         try {
             numeriVincentiDaInviare = handler.getNumeriVincenti();
             System.out.println("Aspetto di ricevere n carte da client");
-            int n = inDaClient.read();
+            String n = inDaClient.readLine();
+            System.out.println(n);
             System.out.println("Genero carte...");
-            generoCarteComprate(n);
-
-            boolean check1 = false;
-            for (int z = 0; z <= n; z++) {
-                outVersoClient.writeInt(numeriComprati[z]);
+            generoCarteComprate(Integer.parseInt(n));
+            
+            System.out.println(Integer.parseInt(n));
+           
+            for (int z = 0; z <= Integer.parseInt(n) ; z++) {
+                
+                System.out.println(numeriComprati[z]);
+                outVersoClient.writeBytes(Integer.toString(numeriComprati[z]) + "\n");
+                
             }
 
 
 
             for (int i = 0; i < numeriVincentiDaInviare.length; i++) {
-                outVersoClient.writeInt((numeriVincentiDaInviare[i]));
+                outVersoClient.writeBytes((Integer.toString(numeriVincentiDaInviare[i]) + "\n"));
             }
 
 
-            client.close();
+          
             inDaClient.close();
             outVersoClient.close();
+            client.close();
 
         }
         catch(Exception e){
@@ -79,7 +85,10 @@ public class ServerThread implements Runnable{
         numeriComprati = new int[nCarteComprate];
             for(int i = 0; i <= nCarteComprate; i++){
                 numeriComprati[i] = gen.nextInt(90);
+                System.out.println(numeriComprati[i]);
+                System.out.println("CIAO");
         }
+            
 
     }
 
