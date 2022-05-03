@@ -6,16 +6,16 @@ public class Gestore implements Runnable{
 
     private Random gen = new Random();
     private int[] numeriVincenti = new int[5];
-    int numeroConnessioni;                       //numero di client possibili
+    final static int numeroConnessioni = 4;                       //numero di client possibili
     ServerThread[] arrayProcessiDedicatiClient;
     Thread[] processiServer;                    //Array
     ServerSocket socketServer;                  //Socket server
     boolean loop = true;
     Thread processo;
 
-    public Gestore(int numeroConnessioni){
+    public Gestore(){
         this.gen = gen;
-        this.numeroConnessioni = numeroConnessioni;
+        processiServer = new Thread[numeroConnessioni];
         arrayProcessiDedicatiClient = new ServerThread[numeroConnessioni];
         processo = new Thread(this);
         processo.start();
@@ -30,25 +30,20 @@ public class Gestore implements Runnable{
 
         while(loop){
             try {
-                for (int i = 0; i <= numeroConnessioni; i++) {
+                for (int i = 0; i <= 4; i++) {
                     Socket t = null;
                     t = socketServer.accept();
+                    System.out.println("Client connesso = " + t.getPort());
                     arrayProcessiDedicatiClient[i] = new ServerThread(t,this);
                     processiServer[i] = new Thread(arrayProcessiDedicatiClient[i]);
                     processiServer[i].start();
                 }
             }
             catch(Exception e){
+                e.printStackTrace();
                 loop = false;
             }
-
-
-            //Gestore g = new Gestore(4);
-            //g.numeriVincenti();
-
-
         }
-
     }
 
     public void numeriVincenti(){
@@ -62,10 +57,8 @@ public class Gestore implements Runnable{
     }
 
     public static void main(String[] args) {
-        Gestore g = new Gestore(4);
-        Thread handler = new Thread(g);
+        Gestore g = new Gestore();
         g.numeriVincenti();
-        handler.start();
     }
 
 }

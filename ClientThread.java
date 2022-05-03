@@ -87,7 +87,6 @@ public class ClientThread implements Runnable{
 
     public static void main(String[] args) {
         ClientThread c = new ClientThread();
-        Thread client = new Thread(c);
-        client.start();
+
     }
 }

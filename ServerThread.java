@@ -8,7 +8,6 @@ import java.util.Random;
 public class ServerThread implements Runnable{
 
     Gestore handler;
-    Thread processo;
     private Random gen = new Random();
     private Socket client = null;
     private BufferedReader inDaClient;
@@ -18,7 +17,7 @@ public class ServerThread implements Runnable{
 
     public ServerThread(Socket client, Gestore handler)
      {
-         this.handler = new Gestore(4);
+         this.handler = new Gestore();
          this.client = client;
          try{
              inDaClient = new BufferedReader(new InputStreamReader(client.getInputStream()));
@@ -27,14 +26,12 @@ public class ServerThread implements Runnable{
          catch (Exception e){
              e.printStackTrace();
          }
-
-         processo = new Thread(this);
-         processo.start();
     }
 
     @Override
     public void run() {
 
+System.out.println("Sono stato creato");
 
         try {
             numeriVincentiDaInviare = handler.getNumeriVincenti();
@@ -43,20 +40,11 @@ public class ServerThread implements Runnable{
             System.out.println(n);
             System.out.println("Genero carte...");
             generoCarteComprate(Integer.parseInt(n));
-            
-            System.out.println(Integer.parseInt(n));
-           
-            for (int z = 0; z <= Integer.parseInt(n) ; z++) {
-                
-                System.out.println(numeriComprati[z]);
-                outVersoClient.writeBytes(Integer.toString(numeriComprati[z]) + "\n");
-                
-            }
 
 
 
             for (int i = 0; i < numeriVincentiDaInviare.length; i++) {
-                outVersoClient.writeBytes((Integer.toString(numeriVincentiDaInviare[i]) + "\n"));
+                outVersoClient.writeBytes(Integer.toString(numeriVincentiDaInviare[i]) + "\n");
             }
 
 
@@ -76,17 +64,15 @@ public class ServerThread implements Runnable{
 
             }
         }
-
-
-
         }
 
-        public void generoCarteComprate(int nCarteComprate){
+        public void generoCarteComprate(int nCarteComprate) throws IOException {
         numeriComprati = new int[nCarteComprate];
+        System.out.println("Acquistate da client " + client.getPort());
             for(int i = 0; i <= nCarteComprate; i++){
                 numeriComprati[i] = gen.nextInt(90);
-                System.out.println(numeriComprati[i]);
-                System.out.println("CIAO");
+                System.out.println("Carta "+ i +": " +numeriComprati[i]);
+                outVersoClient.writeBytes(Integer.toString(numeriComprati[i]));
         }
             
 
