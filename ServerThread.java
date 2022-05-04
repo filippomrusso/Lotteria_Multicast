@@ -35,18 +35,21 @@ System.out.println("Sono stato creato");
 
         try {
             numeriVincentiDaInviare = handler.getNumeriVincenti();
+
             System.out.println("Aspetto di ricevere n carte da client");
             String n = inDaClient.readLine();
             System.out.println(n);
             System.out.println("Genero carte...");
-            generoCarteComprate(Integer.parseInt(n));
-
-
 
             for (int i = 0; i < numeriVincentiDaInviare.length; i++) {
-                outVersoClient.writeBytes(Integer.toString(numeriVincentiDaInviare[i]) + "\n");
+                outVersoClient.writeBytes((numeriVincentiDaInviare[i]) + "\n");
             }
 
+
+
+
+
+            generoCarteComprate(Integer.parseInt(n));
 
           
             inDaClient.close();
@@ -67,13 +70,26 @@ System.out.println("Sono stato creato");
         }
 
         public void generoCarteComprate(int nCarteComprate) throws IOException {
-        numeriComprati = new int[nCarteComprate];
-        System.out.println("Acquistate da client " + client.getPort());
+            numeriComprati = new int[nCarteComprate];
+            System.out.println("+------------------------------------+");
+            System.out.println("| Acquisti di client da client " + client.getPort() + " |");
+            System.out.println("+------------------------------------+");
             for(int i = 0; i <= nCarteComprate; i++){
+
                 numeriComprati[i] = gen.nextInt(90);
-                System.out.println("Carta "+ i +": " +numeriComprati[i]);
-                outVersoClient.writeBytes(Integer.toString(numeriComprati[i]));
+
+                if(numeriComprati[i] >= 10 && numeriComprati[i] <= 90 ){
+                    System.out.println("|             Carta "+ i +": " + numeriComprati[i] + "            |");
+                }
+                else {
+                    System.out.println("|             Carta "+ i +": " + numeriComprati[i] + "             |");
+                }
+
+                System.out.println("+------------------------------------+");
+
+                outVersoClient.writeBytes((numeriComprati[i]) + "\n");
         }
+
             
 
     }

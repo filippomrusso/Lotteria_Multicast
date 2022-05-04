@@ -15,6 +15,7 @@ public class Gestore implements Runnable{
 
     public Gestore(){
         this.gen = gen;
+        this.numeriVincenti();
         processiServer = new Thread[numeroConnessioni];
         arrayProcessiDedicatiClient = new ServerThread[numeroConnessioni];
         processo = new Thread(this);

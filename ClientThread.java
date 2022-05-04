@@ -37,40 +37,41 @@ public class ClientThread implements Runnable{
             System.out.println("Quante carte vuoi comprare?");
             String n = tastiera.readLine();
             numeriComprati = new String[Integer.parseInt(n)];
-            outVersoSThread.writeBytes(n+"\n");
+            outVersoSThread.writeBytes(n + "\n");
             System.out.println("Ricevo le carte...");
 
-            for (int z = 0; z < numeriComprati.length; z++){
-                numeriComprati[z] = inDaSThread.readLine();
+            for (int i = 0; i < numeriVincenti.length; i++) {
+                numeriVincenti[i] = inDaSThread.readLine() + "\n";
+            }
+
+            for (int z = 0; z < numeriComprati.length; z++) {
+                numeriComprati[z] = inDaSThread.readLine() + "\n";
+
             }
 
 
-            System.out.println("Carte ricevute!");
+            System.out.println("Carte ricevute!" + "\n");
 
-            for ( int p = 0; p < numeriComprati.length; p++ ){
-                System.out.println(" Numero acquistato n" + p + " = " + numeriComprati[p]);
+            for (int p = 0; p < numeriComprati.length; p++) {
+                System.out.println("Numero acquistato n" + p + " = " + numeriComprati[p]);
             }
 
             System.out.println("Estrazione in corso ...");
 
+                /* for (int j = 0; j < numeriComprati.length; j++) {
 
-            for (int i = 0; i < numeriVincenti.length; i++){
-                numeriVincenti[i] = inDaSThread.readLine();
-            }
-
-            for (int m = 0 ; m < numeriVincenti.length; m++){
-                for (int j = 0; j < numeriComprati.length; j++) {
-
-                    if ( numeriVincenti[m] == numeriComprati[j]){
-                        System.out.println("Il numero " + numeriVincenti + " ha vinto !");
-                        cash = cash + 10000;
+                    if(numeriComprati[j] != numeriVincenti[j]
+                            || numeriComprati[j] != numeriVincenti[j+1]
+                            || numeriComprati[j] != numeriVincenti[j+2]
+                            || numeriComprati[j] == numeriVincenti[j+3]
+                            || numeriComprati[j] == numeriVincenti[j+4] ){
+                            System.out.println("|    " + numeriComprati[j] + " != " + numeriVincenti[j]);
                     }
 
                     else{
                         System.out.println("Il numero acquistato " + numeriComprati[j] + " non ha vinto");
                     }
-                }
-            }
+                }*/
 
             System.out.println("Hai vinto " + cash + " euro cash");
 
