@@ -6,16 +6,16 @@ public class Gestore implements Runnable{
 
     private Random gen = new Random();
     private int[] numeriVincenti = new int[5];
-    final static int numeroConnessioni = 4;                       //numero di client possibili
-    ServerThread[] arrayProcessiDedicatiClient;
-    Thread[] processiServer;                    //Array
-    ServerSocket socketServer;                  //Socket server
+    final static int numeroConnessioni = 8;
+    private ServerThread[] arrayProcessiDedicatiClient;
+    private Thread[] processiServer;
+    private ServerSocket socketServer;
     boolean loop = true;
     Thread processo;
 
     public Gestore(){
         this.gen = gen;
-        this.numeriVincenti();
+        this.numeriVincenti = numeriVincenti();
         processiServer = new Thread[numeroConnessioni];
         arrayProcessiDedicatiClient = new ServerThread[numeroConnessioni];
         processo = new Thread(this);
@@ -47,10 +47,13 @@ public class Gestore implements Runnable{
         }
     }
 
-    public void numeriVincenti(){
+    public int[] numeriVincenti(){
+
         for(int i = 0; i < numeriVincenti.length; i++){
            numeriVincenti[i] = gen.nextInt(90);
         }
+
+        return numeriVincenti;
     }
 
     public int[] getNumeriVincenti() {

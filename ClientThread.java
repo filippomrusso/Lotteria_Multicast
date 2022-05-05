@@ -14,6 +14,7 @@ public class ClientThread implements Runnable{
     private DataOutputStream outVersoSThread;
     private String[] numeriComprati;
     private String[] numeriVincenti = new String[5];
+    private boolean[] numeriPresi;
     private  int cash = 0;
     Thread processo;
 
@@ -37,11 +38,13 @@ public class ClientThread implements Runnable{
             System.out.println("Quante carte vuoi comprare?");
             String n = tastiera.readLine();
             numeriComprati = new String[Integer.parseInt(n)];
+            numeriPresi = new boolean[numeriComprati.length];
             outVersoSThread.writeBytes(n + "\n");
-            System.out.println("Ricevo le carte...");
+            System.out.println("Ricevo le carte..." + "\n");
 
             for (int i = 0; i < numeriVincenti.length; i++) {
                 numeriVincenti[i] = inDaSThread.readLine() ;
+                System.out.println("Numero vincente: " + numeriVincenti[i]);
             }
 
             for (int z = 0; z < numeriComprati.length; z++) {
@@ -50,41 +53,26 @@ public class ClientThread implements Runnable{
             }
 
 
-            System.out.println("Carte ricevute!" + "\n");
+            System.out.println("\n" + "Carte ricevute!" + "\n");
 
             for (int p = 0; p < numeriComprati.length; p++) {
-                System.out.println("Numero acquistato n" + p + " = " + numeriComprati[p]);
+                System.out.println("Numero acquistato :" + numeriComprati[p]);
             }
             System.out.println("\n");
 
-            System.out.println("Estrazione in corso ...");
+            System.out.println("Estrazione in corso ..." + "\n");
 
+            numeriPresi = checkNumeri(numeriComprati, numeriVincenti);
 
+            System.out.println("\n");
 
-                for (int j = 0,t ; j < numeriComprati.length; j++) {
+            for(int x = 0; x < numeriComprati.length; x++ ){
 
-                    System.out.println("+-------------------------");
+                String s = Boolean.toString(numeriPresi[x]);
+                System.out.println("|  " + s);
+                System.out.println("+---------");
 
-                    for(int i = 0; i< numeriVincenti.length; i++){
-
-
-
-                        if (numeriComprati[j].equalsIgnoreCase(numeriVincenti[i])){
-                            cash = cash + 1000;
-                            System.out.println("| Numero comprato: " + numeriComprati[j]  + " = " + numeriVincenti[i] +" ⋆$⋆");
-                        }
-
-
-
-                        else{
-                            System.out.println("| Numero comprato: " + numeriComprati[j]  + " != " + numeriVincenti[i]);
-                        }
-
-                        System.out.println("+-------------------------");
-                    }
-
-
-                }
+            }
 
             System.out.println("Hai vinto " + cash + " euro cash");
 
@@ -94,10 +82,53 @@ public class ClientThread implements Runnable{
             client.close();
         }
 
+
         catch (Exception e) {
             e.printStackTrace();
         }
-    }
+
+
+
+        }
+
+        boolean[] checkNumeri(String[] nCop, String[] nVinc) {
+
+            boolean[] nPresi = new boolean[nCop.length];
+            int[] nC = new int[nCop.length];
+            int[] nV = new int[nVinc.length];
+
+            for(int i = 0; i < nCop.length; i ++ ){
+                nC[i] = Integer.parseInt(nCop[i]);
+            }
+
+            for(int i = 0; i < nVinc.length; i ++ ){
+                nV[i] = Integer.parseInt(nVinc[i]);
+            }
+
+
+            for (int j = 0; j < nC.length; j++) {
+
+                for (int i = 0; i < nV.length; i++) {
+
+                     int nC_temp = nC[j];
+                     int nV_temp = nV[i];
+
+                     System.out.format("|  " + nC[j] + " --> " +nV[i] + "  |" );
+
+                    if (nC[j] != nV[i]) {
+                        nPresi[j] = false;
+                    }
+
+                    if (nC[j] == nV[i]) {
+                        nPresi[j] = true;
+                    }
+                }
+
+                System.out.println("\n");
+            }
+
+            return nPresi;
+        }
 
 
     public static void main(String[] args) {

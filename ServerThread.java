@@ -34,6 +34,7 @@ public class ServerThread implements Runnable{
 System.out.println("Sono stato creato");
 
         try {
+
             numeriVincentiDaInviare = handler.getNumeriVincenti();
 
             System.out.println("Aspetto di ricevere n carte da client");
@@ -41,7 +42,7 @@ System.out.println("Sono stato creato");
             System.out.println(n);
             System.out.println("Genero carte...");
 
-            for (int i = 0; i < numeriVincentiDaInviare.length; i++) {
+            for(int i = 0; i < numeriVincentiDaInviare.length; i++) {
                 outVersoClient.writeBytes((numeriVincentiDaInviare[i]) + "\n");
             }
 
